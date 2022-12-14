@@ -1,0 +1,29 @@
+<%- include("partials/header") %>
+
+<style>
+   img {
+      object-fit: cover;
+      object-position: center;
+      width: 10%;
+      height: auto;
+      object-fit: cover;
+   }
+   a {
+      text-decoration: none;
+   }
+</style>
+
+<% attachments.forEach(function(object) { %>
+   <div class="card">
+     <p><%= object.desc %></p>
+     <p><%= object.date %></p>
+   </div>
+   <% object.attach.forEach(function(image) { %>
+     <a href="<%= image %>" data-lightbox="<%= object.desc %>">
+       <img src="<%= image %>" alt="<%= object.desc %>" />
+     </a>
+   <% }); %>
+ <% }); %>
+
+
+<%- include("partials/footer") %>
