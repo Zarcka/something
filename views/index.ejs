@@ -15,12 +15,18 @@
 
 <% attachments.forEach(function(object) { %>
    <div class="card">
-     <p><%= object.desc %></p>
+     <%
+	  	const regex = /<:\w+:(\d+)>/g;
+	  	const imgTag = `<img src="https://cdn.discordapp.com/emojis/$1.png" alt="$&" style="width: 1%; height: auto;"/>`;
+	  	const updatedDesc = object.desc.replace(regex, imgTag);
+	  	const escapedDesc = ejs.render(updatedDesc);
+     %>
+     <p><%- escapedDesc %></p>
      <p><%= object.date %></p>
    </div>
    <% object.attach.forEach(function(image) { %>
      <a href="<%= image %>" data-lightbox="<%= object.desc %>">
-       <img src="<%= image %>" alt="<%= object.desc %>" />
+		<img src="<%= image %>" alt="<%= object.desc %>" />
      </a>
    <% }); %>
  <% }); %>

@@ -6,6 +6,7 @@ const path = require("path");
 const flash = require("express-flash");
 const { fetch } = require("./routes/index.js");
 const mongoose = require("mongoose");
+const ejs = require("ejs");
 const app = express();
 mongoose.connect(
   "mongodb+srv://screepy:64478912@cluster0.enpgcpw.mongodb.net/?retryWrites=true&w=majority",
@@ -32,15 +33,16 @@ const templateDir = path.resolve(`${dataDir}${path.sep}views`);
 const renderTemplate = (res, req, template, data = {}) => {
   const baseData = {
     path: req.path,
+    ejs,
   };
   res.render(
     path.resolve(`${templateDir}${path.sep}${template}`),
-    Object.assign(baseData, data)
+    Object.assign(baseData, data),
   );
 };
 
 app.get("/", async function (req, res) {
-  await fetch();
+  await fetch("688660450568699986", "933943929643098142");
   const find = await upload.find({});
   const attachments = find.map((item) => {
     return item;
