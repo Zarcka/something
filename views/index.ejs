@@ -1,35 +1,55 @@
 <%- include("partials/header") %>
 
 <style>
-   img {
+   img, video {
       object-fit: cover;
       object-position: center;
       width: 10%;
       height: auto;
       object-fit: cover;
    }
+
+   video {
+      width: 15%;
+   }
+
    a {
       text-decoration: none;
    }
+
+   .ping {
+      color: #ffc6e2;
+      background-color: rgba(255, 198, 226, 0.2);
+      border-radius: 5px;
+      padding: 1.5px 3.5px 1.5px 3.5px;
+   }
 </style>
 
-<% attachments.forEach(function(object) { %>
+<% attachments.forEach(function(object) {%>
    <div class="card">
-     <%
-	  	const regex = /<:\w+:(\d+)>/g;
-	  	const imgTag = `<img src="https://cdn.discordapp.com/emojis/$1.png" alt="$&" style="width: 1%; height: auto;"/>`;
-	  	const updatedDesc = object.desc.replace(regex, imgTag);
-	  	const escapedDesc = ejs.render(updatedDesc);
-     %>
-     <p><%- escapedDesc %></p>
-     <p><%= object.date %></p>
+   <%
+      const ping = /<@&933943397440450631>/g;
+      const regex = /<:\w+:(\d+)>/g;
+      const imgTag = `<img src="https://cdn.discordapp.com/emojis/$1.png" alt="$&" style="width: 1%; height: auto;"/>`;
+      const spanTag = `<span class="ping">@Art ping~🎨</span>`;
+      let updatedDesc = object.desc.replace(regex, imgTag);
+      updatedDesc = updatedDesc.replace(/\n/g, '<br>');
+      updatedDesc = updatedDesc.replace(ping, spanTag);
+      const renderedDesc = ejs.render(updatedDesc);
+   %>
+      <p><%- renderedDesc %></p>
+      <p><%= object.date %></p>
    </div>
-   <% object.attach.forEach(function(image) { %>
-     <a href="<%= image %>" data-lightbox="<%= object.desc %>">
-		<img src="<%= image %>" alt="<%= object.desc %>" />
-     </a>
+   <% object.attach.forEach(function(attachment) {
+      const fileExtension = attachment.split('.').pop(); %>
+      <% if (fileExtension === 'mp4') { %>
+         <video src="<%= attachment %>" controls></video>
+      <% } else { %>
+         <a href="<%= attachment %>" data-lightbox="<%= object.date %>">
+            <img src="<%= attachment %>" alt="<%= object.date %>" />
+         </a>
+      <% } %>
    <% }); %>
- <% }); %>
-
+<% }); %> 
 
 <%- include("partials/footer") %>
