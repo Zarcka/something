@@ -4,13 +4,14 @@
    img, video {
       object-fit: cover;
       object-position: center;
-      width: 10%;
+      width: 20%;
       height: auto;
-      object-fit: cover;
    }
 
    video {
-      width: 15%;
+      width: 25%;
+      display: block;
+      margin: auto;
    }
 
    a {
@@ -25,31 +26,35 @@
    }
 </style>
 
-<% attachments.forEach(function(object) {%>
-   <div class="card">
-   <%
-      const ping = /<@&933943397440450631>/g;
-      const regex = /<:\w+:(\d+)>/g;
-      const imgTag = `<img src="https://cdn.discordapp.com/emojis/$1.png" alt="$&" style="width: 1%; height: auto;"/>`;
-      const spanTag = `<span class="ping">@Art ping~🎨</span>`;
-      let updatedDesc = object.desc.replace(regex, imgTag);
-      updatedDesc = updatedDesc.replace(/\n/g, '<br>');
-      updatedDesc = updatedDesc.replace(ping, spanTag);
-      const renderedDesc = ejs.render(updatedDesc);
-   %>
-      <p><%- renderedDesc %></p>
-      <p><%= object.date %></p>
-   </div>
-   <% object.attach.forEach(function(attachment) {
-      const fileExtension = attachment.split('.').pop(); %>
-      <% if (fileExtension === 'mp4') { %>
-         <video src="<%= attachment %>" controls></video>
-      <% } else { %>
-         <a href="<%= attachment %>" data-lightbox="<%= object.date %>">
-            <img src="<%= attachment %>" alt="<%= object.date %>" />
-         </a>
-      <% } %>
-   <% }); %>
-<% }); %> 
+<div class="d-flex flex-column text-center justify-content-center">
+   <% attachments.forEach(function(object) {%>
+      <div class="card mb-3 w-50 text-center justify-content-center mx-auto">
+         <div class="card-body">
+         <%
+            const ping = /<@&933943397440450631>/g;
+            const regex = /<:\w+:(\d+)>/g;
+            const imgTag = `<img src="https://cdn.discordapp.com/emojis/$1.png" alt="$&" style="width: 1%; height: auto;"/>`;
+            const spanTag = `<span class="ping">@Art ping~🎨</span>`;
+            let updatedDesc = object.desc.replace(regex, imgTag);
+            updatedDesc = updatedDesc.replace(/\n/g, '<br>');
+            updatedDesc = updatedDesc.replace(ping, spanTag);
+            const renderedDesc = ejs.render(updatedDesc);
+         %>
+            <p class="card-title"><%- renderedDesc %></p>
+            <p class="card-text"><%= object.date %></p>
+         </div>
+      <% object.attach.forEach(function(attachment) {
+         const fileExtension = attachment.split(".").pop(); %>
+         <% if (fileExtension === "mp4") { %>
+            <video src="<%= attachment %>" controls></video>
+         <% } else { %>
+            <a href="<%= attachment %>" data-lightbox="<%= object.date %>">
+               <img src="<%= attachment %>" alt="<%= object.date %>" />
+            </a>
+         <% } %>
+      <% }); %>
+      </div>
+   <% }); %> 
+</div>
 
 <%- include("partials/footer") %>

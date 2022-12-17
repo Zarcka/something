@@ -5,13 +5,13 @@
 }
 
 * {
+    margin: 0;
+    padding: 0;
     box-sizing: border-box;
     color: var(--text-color);
 }
 
-body {
-    margin: 0;
-    padding: 0;
+body, html {
     background-image: var(--bg-flower);
     background-size: 0.5rem;
     background-color: var(--bg-color);

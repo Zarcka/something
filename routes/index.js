@@ -15,12 +15,14 @@ try {
    client.on("ready", async () => {
       console.log("bot is ready");
       client.user.setPresence({
+         activities: [
+            {
+               name: "#❣-ashes-art-corner",
+               type: "WATCHING"
+            },
+         ],
          status: "online",
-         activity: {
-            name: "#❣-ashes-art-corner",
-            type: "WATCHING"
-         }
-      });
+      }); 
    });
 
    const processAttachments = async (messages) => {
