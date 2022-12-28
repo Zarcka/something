@@ -7,9 +7,17 @@ const imageschema = new Schema({
     date: {
         type: String,
     },
+    uploaded_by: {
+        type: String,
+    },
     attach: [
         {
             type: String,
+        }
+    ],
+    reactions: [
+        {
+            type: Array,
         }
     ]
 });

@@ -101,7 +101,9 @@ body {
 }
 
 .action-bar>.action.action--close {
+    font-weight: 400;
     background: conic-gradient(from -50deg at 40% 40%, #ff7e7e, #d93131, #d93131, #d93131, #ff7e7e);
+    color: white;
 }
 
 .action>svg {

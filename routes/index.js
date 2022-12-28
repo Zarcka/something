@@ -31,16 +31,26 @@ try {
          const attach = Array.from(message.attachments.values()).map(({url}) => url);
          const desc = message.content;
          const date = timeConverter(message.createdTimestamp);
+         const uploaded_by = `${message.author.username}#${message.author.discriminator}`;
+         const reactions = Array.from(message.reactions.cache.values()).map(({ _emoji }) => {
+            return {
+               name: _emoji.name,
+               id: _emoji.id || null,
+               count: _emoji.reaction.count
+            }
+         });
          attachments.push({
             desc,
             date,
+            uploaded_by,
             attach,
+            reactions
          });
       });
       attachments.reverse();
       for (let i = 1; i < attachments.length; i++) {
          if (attachments[i].date === attachments[i - 1].date) {
-            attachments[i - 1].desc += `\n${attachments[i].desc}`;
+            attachments[i - 1].desc += `\n\n${attachments[i].desc}`;
             attachments[i - 1].attach = attachments[i - 1].attach.concat(attachments[i].attach);
             attachments.splice(i, 1);
             i--;
@@ -48,7 +58,7 @@ try {
       }
       return attachments;
    };
-
+   
    const updateAttachments = async (guildId, channelId) => {
       upload.find({}, async function (err, docs) {
          const guild = client.guilds.cache.get(guildId);
@@ -56,19 +66,31 @@ try {
          const messages = await channel.messages.fetch();
          const attachments = await processAttachments(messages);
          const old = JSON.parse(fs.readFileSync("./models/attachments.json"));
-         const newAttachments = attachments.filter(
-            (a) => !old.some((o) => o.img === a.img)
-         );
+         const newAttachments = attachments.filter((a) => {
+            for (const prop in a) {
+               if (old.some((o) => o[prop] === a[prop])) {
+               return false;
+               }
+            }
+            return true;
+         });
          const newAttach = old.concat(newAttachments);
-         const filtered = newAttach.filter(
-            (a) => !docs.some((o) => o.img === a.img)
-         );
+         const filtered = newAttach.filter((a) => {
+            for (const prop in a) {
+               if (docs.some((o) => o[prop] === a[prop])) {
+                  return false;
+               }
+            }
+            return true;
+         });       
          if (filtered.length > 0) {
             filtered.forEach(async (a) => {
                await upload.create({
                   desc: a.desc,
                   date: a.date,
+                  uploaded_by: a.uploaded_by,
                   attach: a.attach,
+                  reactions: a.reactions,
                });
             });
          } else {
@@ -77,10 +99,10 @@ try {
          fs.writeFileSync("./models/attachments.json", JSON.stringify(newAttach));
       });
    };
-
+   
    exports.fetch = async (guildId, channelId) => {
       await updateAttachments(guildId, channelId);
-   };
+   };    
 
    client.on("error", console.error);
    client.on("warn", console.warn);
