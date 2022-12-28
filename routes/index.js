@@ -31,18 +31,18 @@ try {
          const attach = Array.from(message.attachments.values()).map(({url}) => url);
          const desc = message.content;
          const date = timeConverter(message.createdTimestamp);
-         const uploaded_by = `${message.author.username}#${message.author.discriminator}`;
-         const reactions = Array.from(message.reactions.cache.values()).map(({ _emoji }) => {
-            return {
-               name: _emoji.name,
-               id: _emoji.id || null,
-               count: _emoji.reaction.count
-            }
-         });
+         const username = message.author.username;
+         const discriminator = message.author.discriminator;
+         const reactions = Array.from(message.reactions.cache.values()).map(({ _emoji }) => ({
+            name: _emoji.name,
+            id: _emoji.id || null,
+            count: _emoji.reaction.count
+         }));
          attachments.push({
             desc,
             date,
-            uploaded_by,
+            username,
+            discriminator,
             attach,
             reactions
          });
@@ -52,11 +52,20 @@ try {
          if (attachments[i].date === attachments[i - 1].date) {
             attachments[i - 1].desc += `\n\n${attachments[i].desc}`;
             attachments[i - 1].attach = attachments[i - 1].attach.concat(attachments[i].attach);
+            attachments[i - 1].reactions = attachments[i - 1].reactions.concat(attachments[i].reactions).reduce((acc, reaction) => {
+               const existingReaction = acc.find((r) => r.name === reaction.name || r.id === reaction.id);
+               if (existingReaction) {
+                  existingReaction.count += reaction.count;
+               } else {
+                  acc.push(reaction);
+               }
+               return acc;
+            }, []);
             attachments.splice(i, 1);
             i--;
          }
       }
-      return attachments;
+      return attachments;       
    };
    
    const updateAttachments = async (guildId, channelId) => {
@@ -88,7 +97,8 @@ try {
                await upload.create({
                   desc: a.desc,
                   date: a.date,
-                  uploaded_by: a.uploaded_by,
+                  username: a.username,
+                  discriminator: a.discriminator,
                   attach: a.attach,
                   reactions: a.reactions,
                });
@@ -102,7 +112,7 @@ try {
    
    exports.fetch = async (guildId, channelId) => {
       await updateAttachments(guildId, channelId);
-   };    
+   };
 
    client.on("error", console.error);
    client.on("warn", console.warn);

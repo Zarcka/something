@@ -7,8 +7,11 @@ const imageschema = new Schema({
     date: {
         type: String,
     },
-    uploaded_by: {
+    username: {
         type: String,
+    },
+    discriminator: {
+        type: Number,
     },
     attach: [
         {
