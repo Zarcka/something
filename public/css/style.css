@@ -1,19 +1,122 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
 :root {
     --text-color: #FFE0F4;
     --bg-color: #512641;
     --bg-flower: url('../assets/pink_sakura.png');
 }
 
-* {
+body {
+    background-size: 40px 40px;
+    background-image: linear-gradient(to right, #0c0026 1px, transparent 1px), linear-gradient(to bottom, #0c002691 1px, transparent 1px);
+    background-color: #000;
+}
+
+.app-window {
+    z-index: 10;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    background-color: transparent;
+    box-shadow: 1rem 1rem 0.5rem #0c002691;
+    /*! animation: 1s alternate background-resize ease; */
+}
+
+.app-window * {
+    z-index: 20;
+}
+
+.app-window>*:first-child {
+    margin-top: 0;
+}
+
+.app-window>*:last-child {
+    margin-bottom: 0;
+}
+
+.app-window>a>img {
+    margin-bottom: 1rem;
+}
+
+.app-window>.card-body {
+    margin-top: 3rem;
+}
+
+.app-window>.app-window__bg--inner {
+    z-index: 10;
+    position: absolute;
+    top: 2.2rem;
+    width: 100%;
+    height: calc(100% - 2.2rem);
+    background: #f3f3f3;
+}
+
+.app-window>.app-window__bg--outer {
+    z-index: 0;
+    position: absolute;
+    left: -0.4rem;
+    top: 0rem;
+    width: calc(100% + 0.8rem);
+    height: calc(100% + 0.4rem);
+    background: linear-gradient(#3899ff, #1a31ca, #0055e6, #081b9e, #081b9e);
+    border-radius: 0.2rem;
+}
+
+.action-bar {
+    overflow: hidden;
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: flex;
+    width: 100%;
+    height: 2.2rem;
     margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    color: var(--text-color);
 }
 
-body, html {
-    background-image: var(--bg-flower);
-    background-size: 0.5rem;
-    background-color: var(--bg-color);
+.action-bar>.action {
+    z-index: 20;
+    position: relative;
+    width: 1.5rem;
+    height: 1.5rem;
+    margin: 0 0.5rem 0 0;
+    justify-self: end;
+    align-self: center;
+    border: 0.1rem solid #f3f3f3;
+    border-radius: 0.2rem;
 }
 
+.action-bar>.title {
+    align-self: center;
+    margin: 0 auto 0 1rem;
+    line-height: 1.15;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 13px;
+    color: white;
+}
+
+.action-bar>.action.action--minimize {
+    font-weight: 900;
+    background: conic-gradient(from -50deg at 40% 40%, #4978f6, #1569f6, #1569f6, #1569f6, #4978f6);
+    color: white;
+}
+
+.action-bar>.action.action--close {
+    background: conic-gradient(from -50deg at 40% 40%, #ff7e7e, #d93131, #d93131, #d93131, #ff7e7e);
+}
+
+.action>svg {
+    overflow: hidden;
+    position: absolute;
+    top: -1.755rem;
+    left: -231%;
+    transform: scale(0.7);
+    fill: white;
+}
+
+.action>svg>path {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+}

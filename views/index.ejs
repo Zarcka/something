@@ -4,7 +4,7 @@
    img, video {
       object-fit: cover;
       object-position: center;
-      width: 20%;
+      width: 50%;
       height: auto;
    }
 
@@ -26,10 +26,13 @@
    }
 </style>
 
+<div class="app-window--pastel fixed-top">
+   <div class="action-bar"></div>
+</div>
+
 <div class="d-flex flex-column text-center justify-content-center">
    <% attachments.forEach(function(object) {%>
-      <div class="card mb-3 w-50 text-center justify-content-center mx-auto">
-         <div class="card-body">
+      <div class="card app-window mb-3 w-50 text-center justify-content-center mx-auto">
          <%
             const ping = /<@&933943397440450631>/g;
             const regex = /<:\w+:(\d+)>/g;
@@ -40,8 +43,20 @@
             updatedDesc = updatedDesc.replace(ping, spanTag);
             const renderedDesc = ejs.render(updatedDesc);
          %>
+
+         <div class="app-window__bg--outer"></div>
+         <div class="app-window__bg--inner"></div>
+         <div class="action-bar">
+            <p class="title"><%= object.date %></p>
+            <button class="action action--minimize">_</button>
+            <button class="action action--close">
+               <svg xmlns="http://www.w3.org/2000/svg">
+                  <path d="m12.45 37.65-2.1-2.1L21.9 24 10.35 12.45l2.1-2.1L24 21.9l11.55-11.55 2.1 2.1L26.1 24l11.55 11.55-2.1 2.1L24 26.1Z"></path>
+               </svg>
+            </button>
+         </div>
+         <div class="card-body">
             <p class="card-title"><%- renderedDesc %></p>
-            <p class="card-text"><%= object.date %></p>
          </div>
       <% object.attach.forEach(function(attachment) {
          const fileExtension = attachment.split(".").pop(); %>
