@@ -4,22 +4,23 @@
 
 ## Stuff to work on
 
-- [] Get stuff to work on
-- [] /(Optional) Write a style documentation?
-- [] Fix image placement when focused on, or just clicked on when used in Chrome, maybe firefox also but meh
+- [x] Get stuff to work on
+- [ ] /(Optional) Write a style documentation?
+- [ ] Style the action buttons for the .app-window--pastel
 
-### Placeholder Text
-- Give a sort of Windows XP look tothe website
-  - [] Fix action bar not properly taking up the space in Chrome
-  - [] Fix windows border linear gradient not matching with action bar linear gradient
-- Placeholder idea
-  - Placeholder idea
-- Placeholder idea
-  - Placeholder idea
+### Ideas
+- Give a sort of Windows XP look to the website
+  - [ ] Fix action bar not properly taking up the space in Chrome
+  - [x] Fix windows border linear gradient not matching with action bar linear gradient
+
+- Make the navbar look like a browser tab
+- Add references to other stuff, such as Undertale
+- Randomize the app-window look each time the user visits the page
+- Add a credit page
 
 ## Notes and extras
 
-- [] Make Ash pay for the emotional damage I got for looking at this artwork: 
+- [ ] Make Ash pay for the emotional damage I got for looking at this artwork: 
 ![Sayu's birthday art](https://cdn.discordapp.com/attachments/933943929643098142/1033480376989003876/Untitled2192_20221011124806.png)
 - [] Use the money I got from making Ash pay to commission them to get a cute drawing
 - [x] Remove all these dumbs notes and extras, this is a serious project Zarcka (consider this done - screepy)
