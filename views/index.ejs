@@ -26,13 +26,17 @@
    }
 </style>
 
-<div class="app-window--pastel fixed-top">
-   <div class="action-bar"></div>
+<div class="app-window app-window--pastel fixed-top">
+	<div class="action-bar action-bar--pastel">
+		<button class="action action--pastel action--minimize">_</button>
+		<button class="action action--pastel action--close">X</button>
+	</div>
+   <div class="app-window__body--pastel"></div>
 </div>
 
 <div class="d-flex flex-column text-center justify-content-center">
    <% attachments.forEach(function(object) {%>
-      <div class="card app-window mb-3 w-50 text-center justify-content-center mx-auto">
+      <div class="card app-window app-window--XP position-relative mb-3 w-50 text-center justify-content-center mx-auto">
          <%
             const ping = /<@&933943397440450631>/g;
             const regex = /<:\w+:(\d+)>/g;
@@ -44,12 +48,12 @@
             const renderedDesc = ejs.render(updatedDesc);
          %>
 
-         <div class="app-window__bg--outer"></div>
-         <div class="app-window__bg--inner"></div>
-         <div class="action-bar">
+         <div class="bg--outer"></div>
+         <div class="bg--inner"></div>
+         <div class="action-bar action-bar--XP">
             <p class="title"><%= object.date %></p>
-            <button class="action action--minimize">_</button>
-            <button class="action action--close">x</button>
+            <button class="action action--XP action--minimize--XP">_</button>
+            <button class="action action--XP action--close--XP">X</button>
          </div>
          <div class="card-body">
             <h6 class="card-subtitle mb-2 text-muted">Uploaded by <%= object.uploaded_by %></h6>
