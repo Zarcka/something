@@ -17,7 +17,7 @@ try {
       client.user.setPresence({
          activities: [
             {
-               name: "#❣-ashes-art-corner",
+               name: "#owners-gallery",
                type: "WATCHING"
             },
          ],
@@ -65,7 +65,7 @@ try {
             i--;
          }
       }
-      return attachments;       
+      return attachments;
    };
    
    const updateAttachments = async (guildId, channelId) => {
@@ -75,6 +75,17 @@ try {
          const messages = await channel.messages.fetch();
          const attachments = await processAttachments(messages);
          const old = JSON.parse(fs.readFileSync("./models/attachments.json"));
+         const hasNewProperty = attachments.some(a => {
+            for (const prop in a) {
+               if (!old.some(o => prop in o)) {
+                  return true;
+               }
+            }
+            return false;
+         });
+         if (hasNewProperty) {
+            await upload.deleteMany({});
+         }
          const newAttachments = attachments.filter((a) => {
             for (const prop in a) {
                if (old.some((o) => o[prop] === a[prop])) {
@@ -91,7 +102,7 @@ try {
                }
             }
             return true;
-         });       
+         });
          if (filtered.length > 0) {
             filtered.forEach(async (a) => {
                await upload.create({
