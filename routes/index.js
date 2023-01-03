@@ -26,6 +26,7 @@ try {
    });
 
    const processAttachments = async (messages) => {
+      let id = 0;
       const attachments = [];
       messages.forEach((message) => {
          const attach = Array.from(message.attachments.values()).map(({url}) => url);
@@ -39,6 +40,7 @@ try {
             count: _emoji.reaction.count
          }));
          attachments.push({
+            id: ++id,
             desc,
             date,
             username,
@@ -86,26 +88,13 @@ try {
          if (hasNewProperty) {
             await upload.deleteMany({});
          }
-         const newAttachments = attachments.filter((a) => {
-            for (const prop in a) {
-               if (old.some((o) => o[prop] === a[prop])) {
-               return false;
-               }
-            }
-            return true;
-         });
-         const newAttach = old.concat(newAttachments);
-         const filtered = newAttach.filter((a) => {
-            for (const prop in a) {
-               if (docs.some((o) => o[prop] === a[prop])) {
-                  return false;
-               }
-            }
-            return true;
-         });
+         const newAttachments = Array.from(new Set(attachments.filter(a => !old.some(o => o.id === a.id))));
+         const newAttach = Array.from(new Set(old.concat(newAttachments)));
+         const filtered = Array.from(new Set(newAttach.filter(a => !docs.some(o => o.id === a.id))));
          if (filtered.length > 0) {
             filtered.forEach(async (a) => {
                await upload.create({
+                  id: a.id,
                   desc: a.desc,
                   date: a.date,
                   username: a.username,

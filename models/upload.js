@@ -1,6 +1,10 @@
 const { Schema, model } = require("mongoose");
 
 const imageschema = new Schema({
+    id: {
+        type: Number,
+        required: true,
+    },
     desc: {
         type: String,
     },
