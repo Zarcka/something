@@ -13,7 +13,7 @@ const client = new Client({
 
 try {
    client.on("ready", async () => {
-      console.log("bot is ready");
+      console.log(`${client.user.username} is ready`);
       client.user.setPresence({
          activities: [
             {
@@ -21,9 +21,18 @@ try {
                type: "WATCHING"
             },
          ],
-         status: "online",
+         status: "idle",
       }); 
    });
+
+   const removeDuplicates = async () => {
+      const docs = await upload.find({});
+      const dedupedDocs = docs.filter((doc, index, self) => self.findIndex(d => d.id === doc.id) === index);
+      const duplicates = docs.filter((doc) => !dedupedDocs.includes(doc));
+      duplicates.forEach(async (duplicate) => {
+         await upload.deleteOne({ _id: duplicate._id });
+      });
+   };
 
    const processAttachments = async (messages) => {
       let id = 0;
@@ -71,6 +80,7 @@ try {
    };
    
    const updateAttachments = async (guildId, channelId) => {
+      await removeDuplicates();
       upload.find({}, async function (err, docs) {
          const guild = client.guilds.cache.get(guildId);
          const channel = await guild.channels.fetch(channelId);
@@ -107,6 +117,7 @@ try {
             return;
          }
          fs.writeFileSync("./models/attachments.json", JSON.stringify(newAttach));
+         await removeDuplicates();
       });
    };
    
