@@ -26,12 +26,52 @@
    }
 </style>
 
+<%- include("partials/nav") %>
+
 <div class="app-window app-window--pastel fixed-top">
 	<div class="action-bar action-bar--pastel">
-		<button class="action action--pastel action--minimize">_</button>
-		<button class="action action--pastel action--close">X</button>
+      <p class="app-window__name app-window__name--pastel"><%= attachments[0].username %></p>
+		<button title="Minimize" class="action action--pastel action--minimize">_</button>
+		<button title="Close" class="action action--pastel action--close">X</button>
 	</div>
-   <div class="app-window__body--pastel"></div>
+   <div class="app-window__body--pastel">
+      <section class="about-me about-me--pastel">
+         <h5 class="title title--pastel">About me</h5>
+         <div class="about-me__body about-me__body--pastel">
+            <p>
+               ╭ ─⨯─➪ .✧
+               <br>
+               |・nonbinary (they/them)
+               <br>
+               |・coms are open!
+               <br>
+               |・anemo main (genshin)
+               <br>
+               |・art staff on YYM
+               <br>
+               |・<a href="https://ashnscar21.carrd.co/">https://ashnscar21.carrd.co/</a>
+               <br>
+               ╰ ─⨯─✿-❥︎--➪ *.✧
+            </p>
+            
+            <p>
+               ╭ ─⨯─➪ .✧
+               <br>
+               |・nonbinary (they/them)
+               <br>
+               |・coms are open!
+               <br>
+               |・anemo main (genshin)
+               <br>
+               |・art staff on YYM
+               <br>
+               |・<a href="https://ashnscar21.carrd.co/">https://ashnscar21.carrd.co/</a>
+               <br>
+               ╰ ─⨯─✿-❥︎--➪ *.✧
+            </p>
+         </div>
+      </section>
+   </div>
 </div>
 
 <div class="d-flex flex-column text-center justify-content-center">
@@ -51,12 +91,12 @@
          <div class="bg--outer"></div>
          <div class="bg--inner"></div>
          <div class="action-bar action-bar--XP">
-            <p class="title"><%= object.date %></p>
-            <button class="action action--XP action--minimize--XP">_</button>
-            <button class="action action--XP action--close--XP">X</button>
+            <p class="app-window__name app-window__name--XP"><%= object.date %></p>
+            <button title="Minimize" class="action action--XP action--minimize--XP">_</button>
+            <button title="Close" class="action action--XP action--close--XP">X</button>
          </div>
          <div class="card-body">
-            <h6 class="card-subtitle mb-2 text-muted">Uploaded by <%= object.uploaded_by %></h6>
+            <h6 class="card-subtitle mb-2 text-muted">Uploaded by <%= object.username %></h6>
             <p class="card-title"><%- renderedDesc %></p>
          </div>
       <% object.attach.forEach(function(attachment) {
