@@ -1,8 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Balsamiq+Sans&display=swap');
 
-:root {}
-
 body {
     --bg-stripe: #ffffff90;
     background-size: 40px 40px;
@@ -117,7 +115,8 @@ body {
     box-shadow: 5px 0 6px #090d1cab;
 }
 
-.tab--page>h6, .URL-bar>h6 {
+.tab--page>h6,
+.URL-bar>h6 {
     margin: 0 0 0 0.75rem;
     font-weight: inherit;
     font-size: inherit;
@@ -181,7 +180,8 @@ body {
     width: 80%;
 }
 
-.tab-bar.tabs-listed>.tab--page:hover, .tab-bar.tabs-listed>.tab--page:focus {
+.tab-bar.tabs-listed>.tab--page:hover,
+.tab-bar.tabs-listed>.tab--page:focus {
     width: 85%;
     font-size: 1rem;
 }
@@ -299,6 +299,19 @@ body {
     width: 100%;
     display: flex;
     align-items: center;
+    justify-content: center;
+}
+
+.pagination--zarcka-custom {
+    display: flex;
+    padding-left: 0;
+    list-style: none;
+    height: 100%;
+    margin: 0;
+    width: 15%;
+    justify-content: center;
+    align-items: center;
+    min-width: max-content;
 }
 
 .URL-bar {
@@ -307,8 +320,8 @@ body {
     align-items: center;
     width: max-content;
     height: 2.2rem;
-    padding: 0 5%;
-    margin: 0 auto;
+    padding: 0 10%;
+    margin: auto;
     color: white;
     font-weight: 400;
     font-size: 0.93rem;
@@ -318,18 +331,46 @@ body {
     box-shadow: 3px 4px 0 #070a15;
 }
 
-.URL-bar--previous, .URL-bar--next {
+.URL-bar--previous,
+.URL-bar--next {
     /* z-index: -100; */
-    padding: 0.375rem 0.75rem;
+    /* padding: 0 0 0rem 0; */
     position: relative;
-    display: block;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    height: 2.2rem;
+    width: 3.2rem;
     color: white;
     text-decoration: none;
     background-color: #2d3e51;
     border: 0.1rem #b90a86 solid;
     border-radius: 0.25rem;
-    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    /* transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out; */
 }
+
+.URL-bar>h6 {
+    margin: auto 0 0.5rem 0;
+}
+
+.page-item {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+}
+
+.page-item a {
+    color: white;
+    font-size: x-large;
+    width: 1rem;
+    height: 11rem;
+    display: flex;
+    height: 11rem;
+    margin: -0.3rem 0 0 0;
+}
+
 /* END | nav */
 
 
@@ -354,12 +395,13 @@ body {
     display: flex;
     flex-direction: row;
     transform: translateX(-50%);
-    text-align:center;
+    text-align: center;
     margin-bottom: 30px;
 }
 
 
-.imglink:hover+.imginfo, .imginfo:hover {
+.imglink:hover+.imginfo,
+.imginfo:hover {
     opacity: 1;
     bottom: .78vw;
 }
