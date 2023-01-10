@@ -60,8 +60,46 @@
         </div>
     </div>
     <div class="bottom-bar">
-        <div class="URL-bar">
-            <h6>127.0.0.1:3000/index.html?page=1</h6>
-        </div>
+        <% if (totalPages > 0) { %>
+            <ul class="pagination" style="justify-content: center; align-items: center;">
+                <% if (page == 1) { %>
+                    <div class="URL-bar--previous">
+                        <li class="page-item disabled">
+                            <a aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+                    </div>
+                <% } else { %>
+                    <% if (page >= 2) { %>
+                        <div class="URL-bar--previous">
+                            <li class="page-item">
+                                <a href="?page=<%= Number(page) - 1 %>" aria-label="Next">
+                                    <span aria-hidden="true">&laquo;</span>
+                                </a>
+                            </li>
+                        </div>
+                    <% } %>
+                <% } %>
+                <li class="page-item"><div class="URL-bar"><h6>Page <%= page %></h6></div></li>
+                <% if (page == totalPages) { %>
+                    <div class="URL-bar--next">
+                        <li class="page-item disabled">
+                            <a aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                    </div>
+                <% } else { %>
+                    <div class="URL-bar--next">
+                        <li class="page-item">
+                            <a href="?page=<%= Number(page) + 1 %>" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                    </div>
+                <% } %>
+            </ul>
+        <% } %>
     </div>
 </nav>

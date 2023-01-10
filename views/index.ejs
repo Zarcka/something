@@ -1,4 +1,4 @@
-<%- include("partials/header") %>
+<%- include("partials/header", { path, title: "Home" }) %>
 
 <style>
    img, video {
@@ -19,8 +19,8 @@
    }
 
    .ping {
-      color: #ffc6e2;
-      background-color: rgba(255, 198, 226, 0.2);
+      color: #f8cfb4;
+      background-color: rgba(248, 207, 180, 0.2);
       border-radius: 5px;
       padding: 1.5px 3.5px 1.5px 3.5px;
    }
@@ -28,6 +28,7 @@
 
 <%- include("partials/nav") %>
 
+<div class="blur"></div>
 <div class="app-window app-window--pastel fixed-top">
 	<div class="action-bar action-bar--pastel">
       <p class="app-window__name app-window__name--pastel"><%= attachments[0].username %></p>
@@ -38,22 +39,6 @@
       <section class="about-me about-me--pastel">
          <h5 class="title title--pastel">About me</h5>
          <div class="about-me__body about-me__body--pastel">
-            <p>
-               ╭ ─⨯─➪ .✧
-               <br>
-               |・nonbinary (they/them)
-               <br>
-               |・coms are open!
-               <br>
-               |・anemo main (genshin)
-               <br>
-               |・art staff on YYM
-               <br>
-               |・<a href="https://ashnscar21.carrd.co/">https://ashnscar21.carrd.co/</a>
-               <br>
-               ╰ ─⨯─✿-❥︎--➪ *.✧
-            </p>
-            
             <p>
                ╭ ─⨯─➪ .✧
                <br>
@@ -80,10 +65,10 @@
          <%
             const ping = /<@&933943397440450631>/g;
             const regex = /<:\w+:(\d+)>/g;
-            const imgTag = `<img src="https://cdn.discordapp.com/emojis/$1.png" alt="$&" style="width: 2.5%; height: auto;"/>`;
-            const spanTag = `<span class="ping">@Art ping~🎨</span>`;
+            const imgTag = `<img src="https://cdn.discordapp.com/emojis/$1.png" alt="$&" style="width: 32px; height: 32px;"/>`;
+            const spanTag = `<span class="ping">@Ash"s creations</span>`;
             let updatedDesc = object.desc.replace(regex, imgTag);
-            updatedDesc = updatedDesc.replace(/\n/g, '<br>');
+            updatedDesc = updatedDesc.replace(/\n/g, "<br>");
             updatedDesc = updatedDesc.replace(ping, spanTag);
             const renderedDesc = ejs.render(updatedDesc);
          %>
@@ -99,18 +84,49 @@
             <h6 class="card-subtitle mb-2 text-muted">Uploaded by <%= object.username %></h6>
             <p class="card-title"><%- renderedDesc %></p>
          </div>
-      <% object.attach.forEach(function(attachment) {
-         const fileExtension = attachment.split(".").pop(); %>
-         <% if (fileExtension === "mp4") { %>
-            <video src="<%= attachment %>" controls></video>
-         <% } else { %>
-            <a href="<%= attachment %>" data-lightbox="<%= object.date %>">
-               <img src="<%= attachment %>" alt="<%= object.date %>" />
-            </a>
-         <% } %>
-      <% }); %>
+         <div id="carousel" class="carousel carousel-dark slide" data-bs-ride="carousel">
+            <ol class="carousel-indicators" style="z-index: 999;">
+               <% object.attach.forEach(function(attachment, i) { %>
+                  <button type="button" data-bs-target="#carousel" data-bs-slide-to="<%= i %>" class="<%= i === 0 ? "active" : "" %>"></li>
+               <% }); %>
+            </ol>
+            <div class="carousel-inner">
+               <% object.attach.forEach(function(attachment, i) {
+                     const fileExtension = attachment.split(".").pop(); %>
+                     <% if (fileExtension === "mp4") { %>
+                        <div class="carousel-item <%= i === 0 ? "active" : "" %>">
+                           <video src="<%= attachment %>" controls></video>
+                        </div>
+                     <% } else { %>
+                        <div class="carousel-item <%= i === 0 ? "active" : "" %>">
+                           <a href="<%= attachment %>" data-lightbox="<%= object.date %>" class="imglink">
+                              <img src="<%= attachment %>" alt="<%= object.date %>" />
+                           </a>
+                           <div class="imginfo">
+                              <% object.reactions.forEach(function(emoji, i) { %>
+                                 <% if (emoji[0].id !== null) { %>
+                                    <img src="https://cdn.discordapp.com/emojis/<%= emoji[0].id %>.png" alt="<%= emoji[0].name %>" style="width: 23px; height: 23px;"/>
+                                 <% } else { %>
+                                    <span class="imgtitle"><%= emoji[0].name %></span>
+                                 <% } %>
+                                 <span class="imgdesc"><%= emoji[0].count %></span>
+                              <% }); %>
+                           </div>
+                        </div>
+                     <% } %>
+               <% }); %>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carousel" data-bs-slide="prev">
+               <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+               <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carousel" data-bs-slide="next">
+               <span class="carousel-control-next-icon" aria-hidden="true"></span>
+               <span class="visually-hidden">Next</span>
+            </button>
+         </div>
       </div>
-   <% }); %> 
+   <% }); %>
 </div>
 
 <%- include("partials/footer") %>
