@@ -61,7 +61,7 @@ Thanks for reading!
 
 ## Credits
 
-- **Screepai**
+- **screepai**
   > Insert Credit Here
 - **Zarcka**
   > I may write them later, also remake the Credits maybe
