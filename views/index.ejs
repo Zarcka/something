@@ -67,7 +67,7 @@
             const ping = /<@&933943397440450631>/g;
             const regex = /<:\w+:(\d+)>/g;
             const imgTag = `<img src="https://cdn.discordapp.com/emojis/$1.png" alt="$&" style="width: 32px; height: 32px;"/>`;
-            const spanTag = `<span class="ping">@Ash"s creations</span>`;
+            const spanTag = `<span class="ping">@Ash's creations</span>`;
             let updatedDesc = object.desc.replace(regex, imgTag);
             updatedDesc = updatedDesc.replace(/\n/g, "<br>");
             updatedDesc = updatedDesc.replace(ping, spanTag);
