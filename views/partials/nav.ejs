@@ -63,41 +63,25 @@
         <% if (totalPages > 0) { %>
             <ul class="pagination--zarcka-custom">
                 <% if (page == 1) { %>
-                    <div class="URL-bar--previous tab">
-                        <li class="page-item disabled">
-                            <a aria-label="Previous">
+                            <a aria-label="Previous" class="URL-bar--previous tab disabled">
                                 <span aria-hidden="true">&laquo;</span>
                             </a>
-                        </li>
-                    </div>
                 <% } else { %>
                     <% if (page >= 2) { %>
-                        <div class="URL-bar--previous tab">
-                            <li class="page-item">
-                                <a href="?page=<%= Number(page) - 1 %>" aria-label="Next">
+                                <a href="?page=<%= Number(page) - 1 %>" class="URL-bar--previous tab" aria-label="Next">
                                     <span aria-hidden="true">&laquo;</span>
                                 </a>
-                            </li>
-                        </div>
                     <% } %>
                 <% } %>
-                <li class="page-item"><div class="URL-bar"><h6>Page <%= page %>/<%= totalPages %></h6></div></li>
+                <div class="URL-bar"><h6>Page <%= page %>/<%= totalPages %></h6></div>
                 <% if (page == totalPages) { %>
-                    <div class="URL-bar--next tab">
-                        <li class="page-item disabled">
-                            <a aria-label="Next">
+                            <a aria-label="Next" class="URL-bar--next tab disabled">
                                 <span aria-hidden="true">&raquo;</span>
                             </a>
-                        </li>
-                    </div>
                 <% } else { %>
-                    <div class="URL-bar--next tab">
-                        <li class="page-item">
-                            <a href="?page=<%= Number(page) + 1 %>" aria-label="Next">
+                            <a href="?page=<%= Number(page) + 1 %>" class="URL-bar--next tab" aria-label="Next">
                                 <span aria-hidden="true">&raquo;</span>
                             </a>
-                        </li>
-                    </div>
                 <% } %>
             </ul>
         <% } %>
