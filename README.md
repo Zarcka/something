@@ -7,7 +7,6 @@
 School is back and I will be unable to work on it as much, the project will still be updated but the intervals will be longer, maybe less bigger updates but I will still be working,
 Here is a list of things that should be done first:
 
-- Arrows inside of the .bottom-bar element to go to the previous or next page, also change the inside of URL-bar based on the ?page url parameter
 - Remove the app-window--pastel on the right when the screen is too small and also increase the width of app-window--XP if app-window--pastel is removed
 - Make the button of app-window actually do something like closing the app-window or hiding it
 - Create or style the about and credits page

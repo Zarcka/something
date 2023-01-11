@@ -340,35 +340,32 @@ body {
     justify-content: center;
     align-content: center;
     height: 2.2rem;
-    width: 3.2rem;
+    width: 2.2rem;
     color: white;
     text-decoration: none;
     background-color: #2d3e51;
     border: 0.1rem #b90a86 solid;
     border-radius: 0.25rem;
     /* transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out; */
+    font-size: x-large;
+    flex-wrap: wrap;
 }
 
 .URL-bar>h6 {
-    margin: auto 0 0.5rem 0;
+    margin: auto 0 auto 0;
 }
 
-.page-item {
-    height: 100%;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-content: center;
+.URL-bar--previous>span, 
+.URL-bar--next>span {
+    margin: 0 0 7px 0;
 }
 
-.page-item a {
-    color: white;
-    font-size: x-large;
-    width: 1rem;
-    height: 11rem;
-    display: flex;
-    height: 11rem;
-    margin: -0.3rem 0 0 0;
+.URL-bar--previous:hover, 
+.URL-bar--next:hover, 
+.URL-bar--previous:focus, 
+.URL-bar--next:focus {
+    margin-bottom: 0.25rem;
+    margin-top: -0.25rem;
 }
 
 /* END | nav */
