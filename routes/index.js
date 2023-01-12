@@ -59,7 +59,6 @@ try {
       }
       fs.writeFileSync("./models/attachments.json", JSON.stringify(attachments));
    };
-   
 
    const processAttachments = async (messages) => {
       let id = 0;
