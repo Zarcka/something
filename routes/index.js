@@ -23,27 +23,78 @@ try {
       });
    });
 
+   async function betterMessageFetcher(channel, limit = 10000) {
+      const sum_messages = [];
+      let last_id;
+      while (true) {
+          const options = { limit: 100 };
+          if (last_id) {
+              options.before = last_id;
+          }
+          const messages = await channel.messages.fetch(options);
+          sum_messages.push(...messages.values());
+          last_id = messages.last().id;
+          if (messages.size != 100 || sum_messages >= limit) {
+              break;
+          }
+      }
+      return sum_messages;
+   }
+
    const removeDuplicates = async () => {
+      const attachments = JSON.parse(fs.readFileSync("./models/attachments.json"));
       const docs = await upload.find({});
-      const dedupedDocs = docs.filter((doc, index, self) => self.findIndex(d => d.id === doc.id) === index);
-      const duplicates = docs.filter((doc) => !dedupedDocs.includes(doc));
-      for (let i = 0; i < duplicates.length; i++) {
+      const dedupedAttachments = attachments.filter((attachment, index, self) => self.findIndex(a => a.desc === attachment.desc) === index);
+      const duplicatesAttachments = attachments.filter((attachment) => !dedupedAttachments.includes(attachment));
+      const dedupedDocs = docs.filter((doc, index, self) => self.findIndex(d => d.desc === doc.desc) === index);
+      const duplicatesDocs = docs.filter((doc) => !dedupedDocs.includes(doc));
+      if (duplicatesAttachments.length <= 0 && duplicatesDocs.length <= 0) return;
+      for (let i = 0; i < duplicatesAttachments.length; i++) {
+         attachments.splice(attachments.indexOf(duplicatesAttachments[i]), 1);
+      }
+      for (let i = 0; i < duplicatesDocs.length; i++) {
          await upload.deleteOne({
-            _id: duplicates[i]._id
+            _id: duplicatesDocs[i]._id
          });
       }
+      fs.writeFileSync("./models/attachments.json", JSON.stringify(attachments));
    };
+   
 
    const processAttachments = async (messages) => {
       let id = 0;
       const attachments = [];
-      for (let i = 0; i < messages.length; i++) {
-         const attach = Array.from(messages[i].attachments.values()).map(({url}) => url);
-         const desc = messages[i].content;
-         const date = timeConverter(messages[i].createdTimestamp);
-         const username = messages[i].author.username;
-         const discriminator = messages[i].author.discriminator;
-         const reactions = Array.from(messages[i].reactions.cache.values()).map(({_emoji}) => ({
+      messages.forEach(async (message) => {
+         if (message.type === "REPLY") {
+            const repliedTo = await message.channel.messages.fetch(message.reference.messageId);
+            const repliedToAttachment = attachments.find(a => timeConverter(repliedTo.createdTimestamp) === a.date);
+            repliedToAttachment.desc += `\n\n${message.content}`;
+            repliedToAttachment.reactions = repliedToAttachment.reactions.concat(Array.from(message.reactions.cache.values()).map(({_emoji}) => ({
+               name: _emoji.name,
+               id: _emoji.id || null,
+               count: _emoji.reaction.count
+            }))).reduce((acc, reaction) => {
+               const existingReaction = acc.find((r) => r.name === reaction.name || r.id === reaction.id);
+               if (existingReaction) {
+                  existingReaction.count += reaction.count;
+               } else {
+                  acc.push(reaction);
+               }
+               return acc;
+            }, []);
+            if (message.attachments.size) {
+               repliedToAttachment.attach = repliedToAttachment.attach.concat(Array.from(message.attachments.values()).map(({url}) => url));
+            }
+            const index = attachments.indexOf(repliedToAttachment);
+            attachments[index] = repliedToAttachment;
+            return;
+         }
+         const attach = Array.from(message.attachments.values()).map(({url}) => url);
+         const desc = message.content;
+         const date = timeConverter(message.createdTimestamp);
+         const username = message.author.username;
+         const discriminator = message.author.discriminator;
+         const reactions = Array.from(message.reactions.cache.values()).map(({_emoji}) => ({
             name: _emoji.name,
             id: _emoji.id || null,
             count: _emoji.reaction.count
@@ -57,7 +108,8 @@ try {
             attach,
             reactions
          });
-      }
+      });
+      attachments.reverse();
       for (let i = 1; i < attachments.length; i++) {
          if (attachments[i].date === attachments[i - 1].date) {
             attachments[i - 1].desc += `\n\n${attachments[i].desc}`;
@@ -75,15 +127,14 @@ try {
             i--;
          }
       }
-      return attachments.reverse();
+      return attachments;
    };
 
    const updateAttachments = async (guildId, channelId) => {
-      await removeDuplicates();
       const docs = await upload.find({});
       const guild = client.guilds.cache.get(guildId);
       const channel = await guild.channels.fetch(channelId);
-      const messages = await channel.messages.fetch();
+      const messages = await betterMessageFetcher(channel);
       const attachments = await processAttachments(messages);
       const old = JSON.parse(fs.readFileSync("./models/attachments.json"));
       const hasNewProperty = attachments.some(a => {
@@ -98,6 +149,7 @@ try {
          await upload.deleteMany({});
       }
       const newAttachments = Array.from(new Set(attachments.filter(a => !old.some(o => o.id === a.id))));
+      await removeDuplicates();
       if(newAttachments.length === 0) return;
       const newAttach = Array.from(new Set(old.concat(newAttachments)));
       const filtered = Array.from(new Set(newAttach.filter(a => !docs.some(o => o.id === a.id))));
