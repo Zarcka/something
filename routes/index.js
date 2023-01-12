@@ -98,22 +98,20 @@ try {
          await upload.deleteMany({});
       }
       const newAttachments = Array.from(new Set(attachments.filter(a => !old.some(o => o.id === a.id))));
+      if(newAttachments.length === 0) return;
       const newAttach = Array.from(new Set(old.concat(newAttachments)));
       const filtered = Array.from(new Set(newAttach.filter(a => !docs.some(o => o.id === a.id))));
-      if (filtered.length > 0) {
-         for (let i = 0; i < filtered.length; i++) {
-            await upload.create({
-               id: filtered[i].id,
-               desc: filtered[i].desc,
-               date: filtered[i].date,
-               username: filtered[i].username,
-               discriminator: filtered[i].discriminator,
-               attach: filtered[i].attach,
-               reactions: filtered[i].reactions,
-            });
-         }
-      } else {
-         return;
+      if (filtered.length === 0) return;
+      for (let i = 0; i < filtered.length; i++) {
+         await upload.create({
+            id: filtered[i].id,
+            desc: filtered[i].desc,
+            date: filtered[i].date,
+            username: filtered[i].username,
+            discriminator: filtered[i].discriminator,
+            attach: filtered[i].attach,
+            reactions: filtered[i].reactions,
+         });
       }
       fs.writeFileSync("./models/attachments.json", JSON.stringify(newAttach));
       await removeDuplicates();
