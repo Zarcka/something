@@ -177,7 +177,7 @@ try {
       }));
       await Promise.all(createAttachments);
       await removeDuplicates();
-   };   
+   };
 
    exports.fetch = async (guildId, channelId) => {
       await updateAttachments(guildId, channelId);
