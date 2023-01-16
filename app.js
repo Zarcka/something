@@ -44,7 +44,7 @@ const renderTemplate = (res, req, template, data = {}) => {
 app.get("/", async function (req, res) {
   await fetch("688660450568699986", "933943929643098142");
   const page = req.query.page || 1;
-  const perPage = 1;
+  const perPage = 5;
   const skip = (page - 1) * perPage;
   const count = await upload.countDocuments();
   const totalPages = Math.ceil(count / perPage);

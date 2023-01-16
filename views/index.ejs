@@ -26,6 +26,15 @@
       background-color: rgba(248, 207, 180, 0.4);
       transition: 0.25s;
    }
+
+   .spoiler {
+      -webkit-filter: blur(10px) grayscale(.5);
+      -webkit-transition-property: -webkit-filter;
+      -webkit-transition-duration: .4s;
+   }
+   .spoiler:hover, .spoiler:focus {
+      -webkit-filter: blur(0px) grayscale(0);
+   }
 </style>
 
 <%- include("partials/nav") %>
@@ -49,7 +58,7 @@
                <br>
                |・anemo main (genshin)
                <br>
-               |・art staff on YYM
+               |・art staff on YYM, PMM, TRTSM
                <br>
                |・<a href="https://ashnscar21.carrd.co/">https://ashnscar21.carrd.co/</a>
                <br>
@@ -67,12 +76,15 @@
       <div class="card app-window app-window--XP position-relative mb-3 w-50 text-center justify-content-center mx-auto">
          <%
             const ping = /<@&933943397440450631>/g;
-            const regex = /<:\w+:(\d+)>/g;
+            const img = /<:\w+:(\d+)>/g;
+            const spoiler = /\|\|(.*)\|\|/;
             const imgTag = `<img src="https://cdn.discordapp.com/emojis/$1.png" alt="$&" style="width: 32px; height: 32px;"/>`;
             const spanTag = `<span class="ping">@Ash's creations</span>`;
-            let updatedDesc = object.desc.replace(regex, imgTag);
+            const spoilerTag = `<span class="spoiler">$1</span>`;
+            let updatedDesc = object.desc.replace(img, imgTag);
             updatedDesc = updatedDesc.replace(/\n/g, "<br>");
             updatedDesc = updatedDesc.replace(ping, spanTag);
+            updatedDesc = updatedDesc.replace(spoiler, spoilerTag);
             const renderedDesc = ejs.render(updatedDesc);
          %>
 
@@ -95,14 +107,15 @@
             </ol>
             <div class="carousel-inner">
                <% object.attach.forEach(function(attachment, i) {
+                     const search = attachment.search(/SPOILER_/);
                      const fileExtension = attachment.split(".").pop(); %>
                      <% if (fileExtension === "mp4") { %>
                         <div class="carousel-item <%= i === 0 ? "active" : "" %>">
-                           <video src="<%= attachment %>" controls></video>
+                           <video src="<%= attachment %>" class="<%= search !== -1 ? "spoiler" : "" %>" controls></video>
                         </div>
                      <% } else { %>
                         <div class="carousel-item <%= i === 0 ? "active" : "" %>">
-                           <a href="<%= attachment %>" data-lightbox="<%= object.date %>" class="imglink">
+                           <a href="<%= attachment %>" data-lightbox="<%= object.date %>" class="imglink <%= search !== -1 ? "spoiler" : "" %>">
                               <img src="<%= attachment %>" alt="<%= object.date %>" />
                            </a>
                            <div class="imginfo">
