@@ -1,15 +1,15 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const upload = require("./models/upload");
-const { port } = require("./config");
+const { port, dbToken } = require("./config");
 const path = require("path");
 const flash = require("express-flash");
 const { fetch } = require("./routes/index.js");
 const mongoose = require("mongoose");
 const ejs = require("ejs");
 const app = express();
-mongoose.connect(
-   "mongodb+srv://screepy:64478912@cluster0.enpgcpw.mongodb.net/?retryWrites=true&w=majority", {
+mongoose.connect(dbToken || "", {
+      keepAlive: true,
       useNewUrlParser: true,
       useUnifiedTopology: true,
    }

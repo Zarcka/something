@@ -1,44 +1,37 @@
-const { Intents, Client } = require("discord.js");
+const { GatewayIntentBits, Partials, Client, Collection } = require("discord.js"); 
 const { QuickDB } = require('quick.db');
 const db = new QuickDB();
 const config = require("../config");
 const fs = require("fs");
 const upload = require("../models/upload");
-const { timeConverter } = require("../functions/timeconverter")
+const { timeConverter } = require("./functions/timeconverter")
+const { betterMessageFetcher } = require("./functions/bettermessagefetcher")
 const client = new Client({
+   disableEveryone: true,
    intents: [
-      Intents.FLAGS.GUILDS,
-      Intents.FLAGS.GUILD_MEMBERS,
-      Intents.FLAGS.GUILD_MESSAGES,
+      GatewayIntentBits.Guilds,
+      GatewayIntentBits.GuildMessages,
+      GatewayIntentBits.GuildPresences,
+      GatewayIntentBits.GuildMessageReactions,
+      GatewayIntentBits.DirectMessages,
+      GatewayIntentBits.MessageContent
+   ],
+   partials: [
+      Partials.Channel,
+      Partials.Message,
+      Partials.User,
+      Partials.GuildMember,
+      Partials.Reaction
    ],
 });
 
+client.prefix_commands = new Collection();
+client.slash_commands = new Collection();
+client.aliases = new Collection();
+
+for(let handler of ["slash_command", "prefix_command", "events"]) require(`./handlers/${handler}`)(client);
+
 try {
-   client.on("ready", async () => {
-      console.log(`${client.user.username} is ready`);
-      client.user.setPresence({
-         activities: [{
-            name: "#owners-gallery",
-            type: "WATCHING"
-         }],
-         status: "idle",
-      });
-   });
-
-   async function betterMessageFetcher(channel, limit = 10000) {
-      const sum_messages = [];
-      let last_id;
-      while (true) {
-         const options = { limit: 100 };
-         if (last_id) { options.before = last_id; }
-         const messages = await channel.messages.fetch(options);
-         sum_messages.push(...messages.values());
-         last_id = messages.last().id;
-         if (messages.size != 100 || sum_messages >= limit) { break; }
-      }
-      return sum_messages;
-   };
-
    const removeDuplicates = async () => {
       const docs = await upload.find({});
       const dedupedDocs = [];
@@ -75,7 +68,7 @@ try {
          let id = 0;
          const attachments = {};
          messages.forEach(async (message) => {
-            if (message.type === "REPLY") {
+            if (message.mentions.repliedUser) {
                const repliedTo = await message.channel.messages.fetch(message.reference.messageId);
                const date = timeConverter(repliedTo.createdTimestamp);
                let repliedToAttachment;
@@ -87,19 +80,21 @@ try {
                }
                if (repliedToAttachment) {
                   repliedToAttachment.desc += `\n\n${message.content}`;
-                  repliedToAttachment.reactions = repliedToAttachment.reactions.concat(Array.from(message.reactions.cache.values()).map(({ _emoji }) => ({
-                     name: _emoji.name,
-                     id: _emoji.id || null,
-                     count: _emoji.reaction.count
-                  }))).reduce((acc, reaction) => {
-                     const existingReaction = acc.find((r) => r.name === reaction.name || r.id === reaction.id);
-                     if (existingReaction) {
-                        existingReaction.count += reaction.count;
-                     } else {
-                        acc.push(reaction);
-                     }
-                     return acc;
-                  }, []);
+                  if (message.reactions.cache.size) {
+                     repliedToAttachment.reactions = repliedToAttachment.reactions.concat(Array.from(message.reactions.cache.values()).map(({ _emoji }) => ({
+                        name: _emoji.name,
+                        id: _emoji.id || null,
+                        count: _emoji.reaction.count
+                     }))).reduce((acc, reaction) => {
+                        const existingReaction = acc.find((r) => r.name === reaction.name || r.id === reaction.id);
+                        if (existingReaction) {
+                           existingReaction.count += reaction.count;
+                        } else {
+                           acc.push(reaction);
+                        }
+                        return acc;
+                     }, []);
+                  }
                   if (message.attachments.size) {
                      repliedToAttachment.attach = repliedToAttachment.attach.concat(Array.from(message.attachments.values()).map(({ url }) => url));
                   }
@@ -123,20 +118,24 @@ try {
                };
             } else {
                attachments[date].desc += `\n\n${message.content}`;
-               attachments[date].attach = attachments[date].attach.concat(Array.from(message.attachments.values()).map(({ url }) => url));
-               attachments[date].reactions = attachments[date].reactions.concat(Array.from(message.reactions.cache.values()).map(({ _emoji }) => ({
-                  name: _emoji.name,
-                  id: _emoji.id || null,
-                  count: _emoji.reaction.count
-               }))).reduce((acc, reaction) => {
-                  const existingReaction = acc.find((r) => r.name === reaction.name || r.id === reaction.id);
-                  if (existingReaction) {
-                     existingReaction.count += reaction.count;
-                  } else {
-                     acc.push(reaction);
-                  }
-                  return acc;
-               }, []);
+               if (message.attachments.size) {
+                  attachments[date].attach = attachments[date].attach.concat(Array.from(message.attachments.values()).map(({ url }) => url));
+               }
+               if (message.reactions.cache.size) {
+                  attachments[date].reactions = attachments[date].reactions.concat(Array.from(message.reactions.cache.values()).map(({ _emoji }) => ({
+                     name: _emoji.name,
+                     id: _emoji.id || null,
+                     count: _emoji.reaction.count
+                  }))).reduce((acc, reaction) => {
+                     const existingReaction = acc.find((r) => r.name === reaction.name || r.id === reaction.id);
+                     if (existingReaction) {
+                        existingReaction.count += reaction.count;
+                     } else {
+                        acc.push(reaction);
+                     }
+                     return acc;
+                  }, []);
+               }
             }
          });
          return Object.values(attachments);
@@ -185,6 +184,11 @@ try {
 
    client.on("error", console.error);
    client.on("warn", console.warn);
+
+   process.on("unhandledRejection", async (err, promise) => {
+      console.error(`Unhandled Rejection: ${err}`.red);
+      console.error(promise);
+    });
 
    client.login(config.token)
 } catch {
