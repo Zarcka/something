@@ -1,5 +1,7 @@
 module.exports = {
   port: 3000,
-  prefix: "a",
+  default_prefix: "",
   token: "",
+  ownerID: [""],
+  dbToken: ""
 };
