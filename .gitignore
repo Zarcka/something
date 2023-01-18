@@ -1,1 +1,3 @@
 node_modules
+config.js
+routes/functions/test.js
