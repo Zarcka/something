@@ -59,6 +59,14 @@ app.get("/", async function (req, res) {
    });
 });
 
+app.get("/screepy", (req, res) => {
+   res.sendFile(`${__dirname}/views/screepy/`);
+});
+
+app.get("/zarcka", (req, res) => {
+   res.sendFile(`${__dirname}/views/zarcka/`);
+});
+
 const potter = port || 3000;
 app.listen(potter, () => {
    console.log(`server started on port ${port}`);
