@@ -12,6 +12,10 @@ body {
     background-color: #233e93;
 }
 
+p a {
+    word-wrap: break-word;
+}
+
 /* START | .app-window */
 
 .app-window {
@@ -44,6 +48,7 @@ body {
     position: relative;
     width: 1.5rem;
     height: 1.5rem;
+    padding: 0;
     margin-right: 0.5rem;
 }
 
@@ -66,6 +71,67 @@ body {
 }
 
 /* END | .action-bar */
+
+/* START | .social-media */
+
+.social-media__link {
+    display: flex;
+    width: 80%;
+    height: 2rem;
+    padding: 0 0.5rem;
+    margin: 0 0 0.8rem 0.5rem;
+    color: inherit;
+    text-decoration: none;
+    background-color: #ffd1da;
+    background-image: linear-gradient(to right, #d4aeb69c 1px, transparent 1px), linear-gradient(to bottom, #d4aeb69c 1px, transparent 1px);
+    background-position: 0 2.1rem;
+    background-size: 10px 10px;
+    border: 1px #ff02a6b3 solid;
+    border-top-color: rgba(255, 2, 166, 0.7);
+    border-right-color: rgba(255, 2, 166, 0.7);
+    border-bottom-color: rgba(255, 2, 166, 0.7);
+    border-left-color: rgba(255, 2, 166, 0.7);
+    border-radius: 0.25rem;
+    box-shadow: 3px 4px 0 #090d1c;
+    transition: all cubic-bezier(0.175, 0.885, 0.32, 1.275) 150ms, background-position cubic-bezier(0.175, 0.885, 0.32, 1.275) 150ms 25ms;
+}
+
+.social-media__link:hover {
+    width: 90%;
+    margin-left: 0.25rem;
+    color: inherit;
+    background-color: #ffb1c1;
+    background-position: 0;
+}
+
+.social-media__icon--spotify {
+    color: #1ed760;
+}
+
+.social-media__icon--twitch {
+    color: #9146FF;
+}
+
+.social-media__icon--twitter {
+    color: #1DA1F2;
+}
+
+.social-media__icon--youtube {
+    color: #ff0000;
+}
+
+.social-media__name {
+	margin: auto auto auto 0.5vw;
+	height: calc(1rem + 0.5vw);
+	font-weight: 600;
+	font-size: calc(0.925rem + 0.1vw);
+}
+
+.social-media__link > svg {
+	align-self: center;
+}
+
+/* END | .social-media */
 
 /* START | nav */
 
@@ -111,7 +177,7 @@ body {
     justify-content: center;
     margin: -1px 0 0 0;
     background-color: #506b88;
-    border-right: 0.1rem #9bace1 solid;
+    border-right: 1px #9bace1 solid;
     box-shadow: 5px 0 6px #090d1cab;
 }
 
@@ -168,7 +234,10 @@ body {
 
 .tab-bar.tabs-listed {
     overflow: hidden scroll;
+    position: absolute;
     flex-direction: column;
+    top: 7.5rem;
+    width: 100%;
     height: max-content;
     padding: 5% 0;
     border-right: 0.1rem #9bace1 solid;
@@ -198,7 +267,7 @@ body {
     background-position: 0 2.1rem;
     background-size: 101% 2.1rem;
     background-repeat: no-repeat;
-    border: 0.1rem #ff02a6b3 solid;
+    border: 1px #ff02a6b3 solid;
     border-radius: 0.25rem;
     box-shadow: 3px 4px 0 #090d1c;
     transition: all cubic-bezier(0.175, 0.885, 0.32, 1.275) 150ms, background-position cubic-bezier(0.175, 0.885, 0.32, 1.275) 150ms 25ms;
@@ -210,6 +279,7 @@ body {
     margin-bottom: 6px;
     color: white;
     background-position: -1px 0;
+    border-color: #0ab9b9;
 }
 
 .tab::before {
@@ -233,17 +303,21 @@ body {
 .tab--settings {
     width: 2.1rem;
     min-width: 2.1rem;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-content: center;
 }
 
 .tab--page {
     display: flex;
     align-items: center;
     width: 18%;
-    min-width: 7rem;
+    min-width: 14rem;
 }
 
 .tab>svg {
-    margin: 0 0 1.8px 0;
+    align-self: center;
 }
 
 .action-bar--browser {
@@ -258,21 +332,15 @@ body {
 }
 
 .action-bar--browser>.action--browser {
-    width: 46px;
-    height: 100%;
-    margin: 0;
+    width: 46px !important;
+    height: 100% !important;
+    margin: 0 !important;
     color: white;
     background-color: transparent;
     border: none;
     transition:
         background-color cubic-bezier(.79, .14, .15, .86) 200ms,
         color cubic-bezier(.79, .14, .15, .86) 200ms 175ms;
-}
-
-.action--browser.action--minimize {
-    font-size: x-large;
-    padding-bottom: 1.2rem;
-    padding-right: 0.2rem;
 }
 
 .action--browser:hover {
@@ -305,11 +373,10 @@ body {
 }
 
 .pagination--zarcka-custom {
+    z-index: 100;
     display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 15%;
-    min-width: 13rem;
+    width: 22%;
+    min-width: 19rem;
     height: 100%;
     padding-left: 0;
     margin: 0;
@@ -317,20 +384,33 @@ body {
 }
 
 .URL-bar {
-    z-index: -100;
+    z-index: -10;
     display: flex;
     align-items: center;
     width: max-content;
     height: 2.2rem;
-    padding: 0 10%;
+    padding: 0 5% 0 0;
     margin: auto;
     color: white;
     font-weight: 400;
     font-size: 0.93rem;
     background-color: #2d3e51;
-    border: 0.1rem #b90a86 solid;
+    border: 1px #0ab9b9 solid;
     border-radius: 0.25rem;
     box-shadow: 3px 4px 0 #070a15;
+    transition: all cubic-bezier(.45,.05,.55,.95) 200ms;
+}
+
+.URL-bar.pages-listed {
+    overflow-y: scroll;
+	flex-direction: column;
+	gap: 1rem;
+	height: max-content;
+    max-height: 70vh;
+	width: 10rem;
+	padding: 6% 0;
+	margin-top: 10px;
+    border-color: #c0138f;
 }
 
 .URL-bar--previous,
@@ -343,13 +423,14 @@ body {
     align-content: center;
     height: 2.2rem;
     width: 2.2rem;
+    margin: 10px auto;
     color: white;
     text-decoration: none;
     background-color: #2d3e51;
-    border: 0.1rem #b90a86 solid;
+    border: 1px #0ab9b9 solid;
     border-radius: 0.25rem;
     /* transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out; */
-    font-size: x-large;
+    font-size: 1.6rem;
     flex-wrap: wrap;
 }
 
@@ -359,30 +440,114 @@ body {
     background-color: #42474c;
     border-color: grey;
     cursor: not-allowed;
-}
-
-.URL-bar>h6 {
-    margin: auto 0 auto 0;
-}
-
-.URL-bar--previous>span, 
-.URL-bar--next>span {
-    margin: 0 0 7px 0;
+    transition: all cubic-bezier(.45,.05,.55,.95) 200ms;
 }
 
 .URL-bar--previous:hover, 
 .URL-bar--next:hover, 
 .URL-bar--previous:focus, 
 .URL-bar--next:focus {
-    margin-bottom: 0.25rem;
-    margin-top: -0.25rem;
+    margin-bottom: 0;
+    margin-top: 5px;
+    border-color: #c0138f;
 }
 
 .URL-bar--previous.disabled:hover, 
 .URL-bar--next.disabled:hover, 
 .URL-bar--previous.disabled:focus, 
 .URL-bar--next.disabled:focus {
-    margin: 0;
+    margin: 10px auto;
+    background-color: #2c3033;
+    border-color: rgb(90, 90, 90);
+}
+
+.URL-bar>h6 {
+    margin: auto 0 auto 1rem;
+}
+
+.URL-bar>a {
+    display: none;
+}
+
+.URL-bar > a > svg {
+	padding: 0 0 3px 0;
+}
+
+.URL-bar>.action--list-pages {
+    width: 2.1rem;
+    height: 101%;
+    padding: 0 4%;
+    color: white;
+    background: transparent;
+    border: none;
+    transition:
+        background-color cubic-bezier(.79, .14, .15, .86) 200ms,
+        color cubic-bezier(.79, .14, .15, .86) 200ms 175ms;
+}
+
+.action--list-pages:hover {
+    color: #0a0c17;
+    background-color: #ffffff40;
+}
+
+.action--list-pages:focus {
+    color: #0a0c17;
+    background-color: #ffffff75;
+}
+
+.action--list-pages.pages-listed {
+    color: #0a0c17;
+    background-color: #ffffff40;
+}
+
+.URL-bar.pages-listed>* {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    width: 70%;
+    height: 2rem;
+    padding: 5% 0;
+    margin: auto 0;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    background-image: linear-gradient(#131d3c, #131d3c);
+    background-position: 0 2.1rem;
+    background-size: 101% 2.1rem;
+    background-repeat: no-repeat;
+    border-bottom: 1px #0ab9b9 dashed;
+    transition: 
+        all cubic-bezier(0.175, 0.885, 0.32, 1.275) 150ms, 
+        background-position cubic-bezier(0.175, 0.885, 0.32, 1.275) 150ms 25ms, 
+        background-color cubic-bezier(0.175, 0.885, 0.32, 1.275) 250ms;
+}
+
+.URL-bar.pages-listed>*:hover, 
+.URL-bar.pages-listed>*:focus {
+    width: 85%;
+    background-position: 0;
+}
+
+.URL-bar.pages-listed>h6 {
+    width: 80%;
+}
+
+.URL-bar.pages-listed>.separator {
+    display: none;
+}
+
+/* Trust me, this is a cheap fix I can find but it works - Zarcka */
+
+.URL-bar--previous>span, 
+.URL-bar--next>span {
+    display: grid;
+    justify-content: center;
+    align-content: flex-end;
+    width: 100%;
+    height: 10px;
+    padding: 29px 0 0 0;
+    margin: auto;
+    background-color: #ffffff40;
 }
 
 /* END | nav */
@@ -451,6 +616,8 @@ body {
 .app-window--XP {
     background-color: transparent;
     box-shadow: 1rem 1rem 0.5rem #090d1c;
+    width: 60%;
+    margin-left: 8%;
 }
 
 .app-window__name--XP {
@@ -493,10 +660,13 @@ body {
 }
 
 .action--XP {
-    border-width: 0.12rem;
-    border-color: #f3f3f3;
+    border: 1px outset #f3f3f3;
     border-radius: 0.2rem;
     font-weight: 700;
+}
+
+.action--XP:active {
+    border-style: inset;
 }
 
 .action--minimize--XP {
@@ -515,8 +685,8 @@ body {
 
 .app-window--pastel {
     top: 8.5rem;
-    width: 21%;
-    height: max-content;
+    width: 23%;
+    height: calc(100% - 9.5rem);
     margin: 0 0.5rem 0 auto;
     background-color: #ffc1cc;
     background-image:
@@ -538,7 +708,7 @@ body {
 }
 
 .title--pastel {
-    margin-right: 1rem;
+    margin-right: 0.8vw;
     padding-left: 0.3rem;
     font-family: 'Balsamiq Sans', cursive;
     font-weight: 500;
@@ -548,9 +718,11 @@ body {
 }
 
 .app-window__body--pastel {
+    overflow-y: scroll;
     position: relative;
     width: calc(100% - 1rem);
     height: calc(100% - 4rem);
+    padding: 1rem 0;
     margin: 0 0 0 0.5rem;
     background-color: #ffd1da;
     border: 0.4rem #ffd1da inset;
@@ -563,30 +735,46 @@ body {
 }
 
 .action--pastel {
+    color: black;
     background-color: #ffeaee;
-    border-color: #ffd3db;
+    border: 2px outset #ffd3db;
 }
 
-.about-me--pastel {
-    overflow-y: scroll;
+.action--pastel:active {
+    border-style: inset;
+}
+
+.app-window__body--pastel>section {
     position: relative;
-    height: 100%;
-    padding: 1rem 0 0 1rem;
+    height: max-content;
+    padding: 0 0 0 1vw;
 }
 
-.about-me--pastel::-webkit-scrollbar {
+.app-window__body--pastel::-webkit-scrollbar {
     width: 4px;
     background-color: #f0f8ff00;
 }
 
-.about-me--pastel::-webkit-scrollbar-thumb {
+.app-window__body--pastel::-webkit-scrollbar-thumb {
     background-color: rgba(170, 139, 145, 0.4);
+}
+
+@media (max-width: 1075px) {
+    .app-window--pastel {
+        display: none;
+    }
+    
+    .app-window--XP {
+        width: 82%;
+        margin-right: auto;
+        margin-left: auto;
+    }
 }
 
 /* In case the browser does not support ::-webkit-scrollbar */
 
 @supports (scrollbar-color: rgba(170, 139, 145, 0.4) #f0f8ff00) and (scrollbar-width: thin) {
-    .about-me--pastel {
+    .app-window__body--pastel {
         scrollbar-color: rgba(170, 139, 145, 0.4) #f0f8ff00;
         scrollbar-width: thin;
     }

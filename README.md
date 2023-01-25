@@ -11,16 +11,18 @@
 - [ ] Work on the development board
 - [ ] Redesign app-window
 - [ ] Remake the file structure
-- [ ] Hover effects on most elements
-- [ ] Make the navbar look like a browser tab
+- [x] Hover effects on most elements
+- [x] Make the navbar look like a browser tab
   - [x] Layout
   - [x] Tabs style
   - [x] Hover effects
   - [x] Icons
-  - [ ] Redirecting to the other page
-- [ ] **Add styling for mobile screen size**
-  - [ ] Navbar
-  - [ ] Body (the main content)
+  - [x] Redirecting to the other page
+- [x] **Add styling for mobile screen size**
+  - [x] Navbar
+  - [x] Body (the main content)
+- [x] Add the credits page
+- [x] " ash social media if we ever figure it out " - screepy
 
 ### Ideas
 - Add references to other stuff, such as Undertale

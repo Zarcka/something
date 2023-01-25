@@ -13,20 +13,14 @@
          </button>
       </div>
       <div class="tab-bar">
-         <a class="tab tab--page" href="#">
-            <h6>Home Tab</h6>
+         <a class="tab tab--page" href="./?page=<%= page %>">
+            <h6>Home - <%= attachments[0].username %> Gallery</h6>
          </a>
          <a class="tab tab--page" href="/screepy">
-            <h6>Home Tab</h6>
+            <h6>Credits - screepy</h6>
          </a>
          <a class="tab tab--page" href="/zarcka">
-            <h6>Home Tab</h6>
-         </a>
-         <a class="tab tab--page" href="#">
-            <h6>Home Tab</h6>
-         </a>
-         <a class="tab tab--page" href="#">
-            <h6>Home Tab</h6>
+            <h6>Credits - Zarcka</h6>
          </a>
       </div>
       <div class="action-bar action-bar--browser">
@@ -39,7 +33,11 @@
             </svg>
          </button>
          <span class="separator"></span>
-         <button title="Minimize" class="action action--browser action--minimize">_</button>
+         <button title="Minimize" class="action action--browser action--minimize">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+               <path fill-rule="evenodd" d="M2 8a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11A.5.5 0 0 1 2 8Z"/>
+            </svg>
+         </button>
          <button title="Restore Down" class="action action--browser action--restore-down">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true">
                <path
@@ -64,26 +62,60 @@
          <ul class="pagination--zarcka-custom">
             <% if (page == 1) { %>
                <a aria-label="Previous" class="URL-bar--previous disabled">
-                  <span aria-hidden="true">&laquo;</span>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                     <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"/>
+                   </svg>
                </a>
             <% } else { %>
                <% if (page >= 2) { %>
                      <a href="?page=<%= Number(page) - 1 %>" class="URL-bar--previous tab" aria-label="Next">
-                        <span aria-hidden="true">&laquo;</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                           <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"/>
+                         </svg>
                      </a>
                <% } %>
             <% } %>
-            <div class="URL-bar"><h6>Page <%= page %>/<%= totalPages %></h6></div>
+            <div class="URL-bar">
+               <button title="List all pages" class="action--list-pages">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-down" viewBox="0 0 16 16">
+                     <path 
+                     fill-rule="evenodd" 
+                     d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z">
+                     </path>
+                  </svg>
+               </button>
+               <span class="separator"></span>
+               <% for (let i = 1; i < totalPages + 1; i++) { %>
+                  <% if (i == page) { %>
+                     <h6>Page <%= page %>/<%= totalPages %></h6>
+                  <% } else { %>
+                     <a href="?page=<%= Number(i) %>">
+                        Page <%= i %>/<%= totalPages %>
+                        
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                           <path fill-rule="evenodd" d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/>
+                           <path fill-rule="evenodd" d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/>
+                        </svg>
+                     </a>
+                  <% } %>
+               <% } %>
+            </div>
             <% if (page == totalPages) { %>
                <a aria-label="Next" class="URL-bar--next disabled">
-                  <span aria-hidden="true">&raquo;</span>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                     <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
+                  </svg>
                </a>
             <% } else { %>
                   <a href="?page=<%= Number(page) + 1 %>" class="URL-bar--next tab" aria-label="Next">
-                     <span aria-hidden="true">&raquo;</span>
+                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
+                     </svg>
                   </a>
             <% } %>
          </ul>
       <% } %>
    </div>
 </nav>
+
+<!-- <h6>Page <%= page %>/<%= totalPages %></h6> -->
