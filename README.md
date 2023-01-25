@@ -2,18 +2,6 @@
 
 **It's something, I don't know what to add now, I will be using this file to keep track of advancements and stuff to work on, bye and see you later!**
 
-## Important Note
-
-School is back and I will be unable to work on it as much, the project will still be updated but the intervals will be longer, maybe less bigger updates but I will still be working,
-Here is a list of things that should be done first:
-
-- Remove the app-window--pastel on the right when the screen is too small and also increase the width of app-window--XP if app-window--pastel is removed
-- Make the button of app-window actually do something like closing the app-window or hiding it
-- Create or style the about and credits page
-
-**And if I don't make any update for weeks or months or even reply to messages, I either went into conversion therapy unwillingly, killed myself, lost access to technology but it's a bit unlikely, so stay safe and take care**
-Thanks for reading!
-
 ## Stuff to work on
 
 - [x] Get stuff to work on
@@ -23,16 +11,18 @@ Thanks for reading!
 - [ ] Work on the development board
 - [ ] Redesign app-window
 - [ ] Remake the file structure
-- [ ] Hover effects on most elements
-- [ ] Make the navbar look like a browser tab
+- [x] Hover effects on most elements
+- [x] Make the navbar look like a browser tab
   - [x] Layout
   - [x] Tabs style
   - [x] Hover effects
   - [x] Icons
-  - [ ] Redirecting to the other page
-- [ ] **Add styling for mobile screen size**
-  - [ ] Navbar
-  - [ ] Body (the main content)
+  - [x] Redirecting to the other page
+- [x] **Add styling for mobile screen size**
+  - [x] Navbar
+  - [x] Body (the main content)
+- [x] Add the credits page
+- [x] " ash social media if we ever figure it out " - screepy
 
 ### Ideas
 - Add references to other stuff, such as Undertale
