@@ -1,10 +1,11 @@
-const { ActivityType } = require("discord.js");
-const setPresence = require("../components/setPresence");
+import setPresence from "../components/setPresence";
+import ClientEvent from "../components/ClientEvent";
+import { ActivityType } from "discord.js";
 
-module.exports.run = async (client) => {
+export default new ClientEvent("ready", async (client) => {
    console.clear();
    console.log(`${client.user.username} is ready`);
-   new setPresence.default(client, [{
+   new setPresence(client, [{
          content: `with Ash's art`,
          type: ActivityType.Playing,
          status: "idle",
@@ -20,4 +21,4 @@ module.exports.run = async (client) => {
          status: "idle",
       },
    ]);
-}
+});

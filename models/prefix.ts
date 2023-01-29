@@ -1,4 +1,4 @@
-const { Schema, model } = require("mongoose");
+import { Schema, model } from 'mongoose';
 
 const prefixschema = new Schema({
    prefix: {
@@ -7,4 +7,4 @@ const prefixschema = new Schema({
    guildId: String
 });
 
-module.exports = model("prefixes", prefixschema);
+export default model<any>("prefixes", prefixschema);

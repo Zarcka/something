@@ -25,6 +25,7 @@
 - [x] " ash social media if we ever figure it out " - screepy
 
 ### Ideas
+
 - Add references to other stuff, such as Undertale
 - Randomize the app-window look each time the user visits the page
 - Add a credit page

@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true,
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true,
+    "module": "commonjs",
+    "outDir": "./dist",
+    "rootDir": ".",
+    "baseUrl": ".",
+    "target": "es6",
+    "noImplicitAny": true,
+    "moduleResolution": "node",
+    "sourceMap": false,
+    "paths": {
+      "*": [
+          "node_modules/*"
+      ]
+  }
+  },
+  "include": ["./**/*"]
+}

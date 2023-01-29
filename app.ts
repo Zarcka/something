@@ -1,19 +1,17 @@
-const express = require("express");
-const bodyParser = require("body-parser");
-const upload = require("./models/upload");
-const { port, dbToken } = require("./config");
-const path = require("path");
-const flash = require("express-flash");
-const { fetch } = require("./routes/index.js");
-const mongoose = require("mongoose");
-const ejs = require("ejs");
+import express, { Response, Request } from "express";
+import bodyParser from "body-parser";
+import upload from "./models/upload";
+import config from "./config";
+import path from "path";
+import flash from "express-flash";
+import { get } from "./routes/index";
+import mongoose from "mongoose";
+import ejs from "ejs";
+
 const app = express();
-mongoose.connect(dbToken || "", {
-      keepAlive: true,
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-   }
-);
+
+mongoose.connect(config.dbToken);
+
 app.set("view engine", "ejs");
 app.use(express.static(`${__dirname}/public`));
 app.use(flash());
@@ -28,9 +26,10 @@ app.use(
       saveUninitialized: false,
    })
 );
+
 const dataDir = path.resolve(`${process.cwd()}`);
 const templateDir = path.resolve(`${dataDir}${path.sep}views`);
-const renderTemplate = (res, req, template, data = {}) => {
+const renderTemplate = (res: Response, req: Request, template: any, data = {}) => {
    const baseData = {
       path: req.path,
       ejs,
@@ -41,9 +40,9 @@ const renderTemplate = (res, req, template, data = {}) => {
    );
 };
 
-app.get("/", async function (req, res) {
-   await fetch("688660450568699986", "933943929643098142");
-   const page = req.query.page || 1;
+app.get("/", async (req: Request, res: Response) => {
+   await get("688660450568699986", "933943929643098142");
+   const page: any = req.query.page || 1;
    const perPage = 5;
    const skip = (page - 1) * perPage;
    const count = await upload.countDocuments();
@@ -59,15 +58,15 @@ app.get("/", async function (req, res) {
    });
 });
 
-app.get("/screepy", (req, res) => {
+app.get("/screepy", (req: Request, res: Response) => {
    res.sendFile(`${__dirname}/views/screepy/`);
 });
 
-app.get("/zarcka", (req, res) => {
+app.get("/zarcka", (req: Request, res: Response) => {
    res.sendFile(`${__dirname}/views/zarcka/`);
 });
 
-const potter = port || 3000;
+const potter = config.port || 3000;
 app.listen(potter, () => {
-   console.log(`server started on port ${port}`);
+   console.log(`server started on port ${potter}`);
 });
