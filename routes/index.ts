@@ -1,5 +1,5 @@
 import { GatewayIntentBits, Partials, Client, Collection } from "discord.js";
-import { QuickDB } from 'quick.db';
+import { QuickDB } from "quick.db";
 import config from "../config";
 import handler from "./handler/main";
 import upload from "../models/upload";

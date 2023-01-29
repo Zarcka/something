@@ -9,6 +9,7 @@ declare type Command = {
       alias?: string[];
       botPermission?: string[];
       authorPermission?: string[];
+      cooldown?: number;
    };
    run: (client: Client, message: Message, args: string[]) => Promise<void>;
 };

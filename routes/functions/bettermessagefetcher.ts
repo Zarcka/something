@@ -1,6 +1,3 @@
-import { QuickDB } from 'quick.db';
-const db = new QuickDB();
-
 export const betterMessageFetcher = async (channel: any, limit: number = 10000): Promise<any[]> => {
    const sum_messages: any[] = [];
    let last_id: any;

@@ -11,8 +11,13 @@ export type SlashCommandOptions = {
 export type CommandOptions = {
    data: {
       name: string;
-      description: string;
-      alias: string[];
+      description?: string;
+      usage?: string;
+      ownerOnly?: boolean;
+      alias?: string[];
+      botPermission?: string[];
+      authorPermission?: string[];
+      cooldown?: number;
    };
    run(client: Client, message: Message, args: string[]): Promise<void | any>;
 };
