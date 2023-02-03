@@ -52,97 +52,70 @@ const removeDuplicates = async (): Promise<void> => {
       }
    });
    const duplicatesDocs = docs.filter((doc) => !dedupedDocs.includes(doc));
-   if (duplicatesDocs.length <= 0) return;
-   for (let i = 0; i < duplicatesDocs.length; i++) {
-      await upload.deleteOne({
-         _id: duplicatesDocs[i]._id
-      });
+   if (duplicatesDocs.length <= 0) {
+      console.log('No duplicates found');
+      return;
    }
+   for (let i = 0; i < duplicatesDocs.length; i++) {
+      console.log(`Deleting duplicate ${i + 1} of ${duplicatesDocs.length}`);
+      try {
+         await upload.deleteOne({
+            _id: duplicatesDocs[i]._id
+         });
+      } catch (err) {
+         console.log(`Could not delete duplicate ${i + 1} of ${duplicatesDocs.length}`);
+      }
+   }
+   console.log('Finished removing duplicates');
 };
 
-const processAttachments = async (messages: any[]) => {
+const processAttachments = async (messages: any[]): Promise<any | false> => {
    const docs = await upload.find({});
    const lastMessageId = await db.get("lastMessageId");
    const latestMessageId = messages.reverse()[messages.length - 1].id;
    if (lastMessageId !== latestMessageId || docs.length === 0) {
       await db.set("lastMessageId", latestMessageId);
-      let id = 0;
-      const attachments: any = {};
-      messages.forEach(async (message: any) => {
+      const attachments: { [key: string]: { id: number, desc: string, date: string, username: string, discriminator: string, attach: string[], reactions: { name: string, id: string | null, count: number }[] } } = {};
+      messages.forEach(async (message) => {
+         const date = timeConverter(message.createdTimestamp);
+         const reactions = Array.from(message.reactions.cache.values()).map(({ _emoji }: any) => ({
+            name: _emoji.name,
+            id: _emoji.id || null,
+            count: _emoji.reaction.count
+         }));
+         const attach = Array.from(message.attachments.values()).map(({ url }: any) => url);
          if (message.mentions.repliedUser) {
-            const repliedTo = await message.channel.messages.fetch(message.reference.messageId);
-            const date = timeConverter(repliedTo.createdTimestamp);
-            let repliedToAttachment: any;
-            for (const attachment in attachments) {
-               if (attachments[attachment].date === date) {
-                  repliedToAttachment = attachments[attachment];
-                  break;
+            const repliedTo = await message.channel.messages.fetch(message.reference.messageId).catch((): any => null);
+            if (repliedTo) {
+               const replyDate = timeConverter(repliedTo.createdTimestamp);
+               const replyAttachment = attachments[replyDate];
+               if (replyAttachment) {
+                  replyAttachment.desc += `\n\n${message.content}`;
+                  replyAttachment.reactions = [...replyAttachment.reactions, ...reactions];
+                  replyAttachment.attach = [...replyAttachment.attach, ...attach];
+                  return;
                }
-            }
-            if (repliedToAttachment) {
-               repliedToAttachment.desc += `\n\n${message.content}`;
-               if (message.reactions.cache.size) {
-                  repliedToAttachment.reactions = repliedToAttachment.reactions.concat(Array.from(message.reactions.cache.values()).map(({ _emoji }: any) => ({
-                     name: _emoji.name,
-                     id: _emoji.id || null,
-                     count: _emoji.reaction.count
-                  }))).reduce((acc: any, reaction: any) => {
-                     const existingReaction = acc.find((r: any) => r.name === reaction.name || r.id === reaction.id);
-                     if (existingReaction) {
-                        existingReaction.count += reaction.count;
-                     } else {
-                        acc.push(reaction);
-                     }
-                     return acc;
-                  }, []);
-               }
-               if (message.attachments.size) {
-                  repliedToAttachment.attach = repliedToAttachment.attach.concat(Array.from(message.attachments.values()).map(({ url }: any) => url));
-               }
-               return;
             }
          }
-         const date = timeConverter(message.createdTimestamp);
-         if (!attachments[date]) {
+         if (attachments[date]) {
+            attachments[date].desc += `\n\n${message.content}`;
+            attachments[date].reactions = [...attachments[date].reactions, ...reactions];
+            attachments[date].attach = [...attachments[date].attach, ...attach];
+         } else {
             attachments[date] = {
-               id: ++id,
+               id: Object.values(attachments).length + 1,
                desc: message.content,
                date,
                username: message.author.username,
                discriminator: message.author.discriminator,
-               attach: Array.from(message.attachments.values()).map(({ url }: any) => url),
-               reactions: Array.from(message.reactions.cache.values()).map(({ _emoji }: any) => ({
-                  name: _emoji.name,
-                  id: _emoji.id || null,
-                  count: _emoji.reaction.count
-               }))
+               attach,
+               reactions,
             };
-         } else {
-            attachments[date].desc += `\n\n${message.content}`;
-            if (message.attachments.size) {
-               attachments[date].attach = attachments[date].attach.concat(Array.from(message.attachments.values()).map(({ url }: any) => url));
-            }
-            if (message.reactions.cache.size) {
-               attachments[date].reactions = attachments[date].reactions.concat(Array.from(message.reactions.cache.values()).map(({ _emoji }: any) => ({
-                     name: _emoji.name,
-                     id: _emoji.id || null,
-                     count: _emoji.reaction.count
-               }))).reduce((acc: any, reaction: any) => {
-                  const existingReaction = acc.find((r: any) => r.name === reaction.name || r.id === reaction.id);
-                  if (existingReaction) {
-                     existingReaction.count += reaction.count;
-                  } else {
-                     acc.push(reaction);
-                  }
-                  return acc;
-               }, []);
-            }
          }
       });
       return Object.values(attachments);
-   } else {
-      return false;
    }
+   return false;
 };
 
 const updateAttachments = async (guildId: string, channelId: string) => {
@@ -152,7 +125,6 @@ const updateAttachments = async (guildId: string, channelId: string) => {
    const messages = await betterMessageFetcher(channel);
    const attachments = await processAttachments(messages);
    if (!attachments) return;
-   await removeDuplicates();
    const hasNewProperty = attachments.some((a: any) => {
       for (const prop in a) {
          if (!docs.some((o: any) => prop in o)) {
@@ -162,7 +134,7 @@ const updateAttachments = async (guildId: string, channelId: string) => {
       return false;
    });
    if (hasNewProperty) {
-      await upload.deleteMany({});
+      upload.deleteMany({});
    }
    const newAttachments = Array.from(new Set(attachments.filter((a: any) => !docs.some((o: any) => o.desc === a.desc))));
    if (newAttachments.length === 0) return;
@@ -176,11 +148,15 @@ const updateAttachments = async (guildId: string, channelId: string) => {
       reactions: attachment.reactions
    }));
    await Promise.all(createAttachments);
-   await removeDuplicates();
+   removeDuplicates();
 };
 
 export const get = async (guildId: string, channelId: string): Promise<void> => {
-   await updateAttachments(guildId, channelId);
+   try {
+      updateAttachments(guildId, channelId);
+   } catch (e) {
+      console.error(e);
+   }
 };
 
 client.on("error", console.error);

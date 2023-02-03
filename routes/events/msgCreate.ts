@@ -35,25 +35,25 @@ export default new ClientEvent("messageCreate", async (client, message) => {
       }
 
       if (cmd.data.botPermission) {
-            const permissions = cmd.data.botPermission.filter((x: any) => !message.guild.members.me.permissions.has(x)).map(x => "`" + x + "`");
-            if (permissions.length) return message.reply({content: `I need ${permissions.join(", ")} permission(s) to execute the command!`});
+         const permissions = cmd.data.botPermission.filter((x: any) => !message.guild.members.me.permissions.has(x)).map(x => "`" + x + "`");
+         if (permissions.length) return message.reply({ content: `I need ${permissions.join(", ")} permission(s) to execute the command!` });
       }
 
       if (cmd.data.authorPermission) {
-            const permissions = cmd.data.authorPermission.filter((x: any) => !message.guild.members.me.permissions.has(x)).map(x => "`" + x + "`");
-            if (permissions.length) return message.reply({content: `You need ${permissions.join(", ")} permission(s) to execute this command!`});
+         const permissions = cmd.data.authorPermission.filter((x: any) => !message.guild.members.me.permissions.has(x)).map(x => "`" + x + "`");
+         if (permissions.length) return message.reply({ content: `You need ${permissions.join(", ")} permission(s) to execute this command!` });
       }
 
-      if (cmd.data.ownerOnly && config.ownerID.includes(message.author.id)) return message.reply({content: "I am sorry but this command can only be used by owner and creators!"});
+      if (cmd.data.ownerOnly && !config.ownerID.includes(message.author.id)) return message.reply({ content: "I am sorry but this command can only be used by owner and creators!" });
 
       let uCooldown = cooldown[message.author.id];
       if (!uCooldown) {
-            cooldown[message.author.id] = {}
-            uCooldown = cooldown[message.author.id]
+         cooldown[message.author.id] = {}
+         uCooldown = cooldown[message.author.id]
       }
 
       const time = uCooldown[cmd.data.name] || 0;
-      if (time && (time > Date.now())) return message.reply({content: `You can again use this command in ${Math.ceil((time - Date.now()) / 1000)} second(s)`});
+      if (time && (time > Date.now())) return message.reply({ content: `You can again use this command in ${Math.ceil((time - Date.now()) / 1000)} second(s)` });
       cooldown[message.author.id][cmd.data.name] = Date.now() + cmd.data.cooldown;
 
       await message.channel.sendTyping();
